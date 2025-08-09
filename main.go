@@ -2,7 +2,6 @@ package main
 
 import "sync"
 
-// Cache — один шард кеша
 type Cache struct {
 	mu    sync.RWMutex
 	cache map[int]int
@@ -33,13 +32,11 @@ func (c *Cache) Lookup(k int) (int, bool) {
 	return v, ok
 }
 
-// SharedCache — кеш с шардами
 type SharedCache struct {
 	caches      []*Cache
 	countShards int
 }
 
-// NewSharedCache — конструктор SharedCache
 func NewSharedCache(countShards int) *SharedCache {
 	caches := make([]*Cache, countShards)
 	for i := 0; i < countShards; i++ {
@@ -51,7 +48,6 @@ func NewSharedCache(countShards int) *SharedCache {
 	}
 }
 
-// shardForKey — вычисляем индекс шарда по ключу
 func (s *SharedCache) shardForKey(k int) int {
 	return k % s.countShards
 }
